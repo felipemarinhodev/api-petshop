@@ -1,0 +1,11 @@
+{
+	"postgres": {
+		"banco-dados": "",
+		"usuario": "",
+		"senha": "",
+		"host": ""
+	},
+	"api": {
+		"porta": 3000
+	}
+}
