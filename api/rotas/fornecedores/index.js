@@ -29,7 +29,7 @@ roteador.get('/:id', async (req, res) => {
 	}
 })
 
-roteador.put('/:id', async (req, res) => {
+roteador.put('/:id', async (req, res, proximo) => {
 	try {
 		const { id } = req.params
 		const dadosRecebidos = req.body
@@ -38,7 +38,7 @@ roteador.put('/:id', async (req, res) => {
 		await fornecedor.atualizar()
 		res.status(200).send(JSON.stringify(fornecedor))
 	} catch (erro) {
-		res.status(400).send(JSON.stringify({ mensagem: erro.message}))
+		proximo(erro) // Middleware que responde os erros da API
 	}
 })
 
