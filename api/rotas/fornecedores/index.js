@@ -7,25 +7,25 @@ roteador.get('/', async (req, res) => {
 	res.status(200).send(JSON.stringify(resultados))
 })
 
-roteador.post('/', async (req, res) => {
+roteador.post('/', async (req, res, proximo) => {
 	try {
 		const dadosRecebidos = req.body
 		const fornecedor = new Fornecedor(dadosRecebidos)
 		await fornecedor.criar()
 		res.status(201).send(JSON.stringify(fornecedor))
 	} catch (erro) {
-		res.status(400).send(JSON.stringify({ mensagem: erro.message}))
+		proximo(erro)
 	}
 })
 
-roteador.get('/:id', async (req, res) => {
+roteador.get('/:id', async (req, res, proximo) => {
 	try {
 		const { id } = req.params
 		const fornecedor = new Fornecedor({ id })
 		await fornecedor.carregar()
 		res.send(JSON.stringify(fornecedor))
 	} catch (erro) {
-		res.status(404).send(JSON.stringify({ mensagem: erro.message}))
+		proximo(erro)
 	}
 })
 
@@ -42,14 +42,14 @@ roteador.put('/:id', async (req, res, proximo) => {
 	}
 })
 
-roteador.delete('/:id', async (req, res) => {
+roteador.delete('/:id', async (req, res, proximo) => {
 	try {
 		const { id } = req.params
 		const fornecedor = new Fornecedor({id})
 		await fornecedor.remover()
 		res.status(204).send()
 	} catch (erro) {
-		res.status(404).send(JSON.stringify({ mensagem: erro.message}))
+		proximo(erro)
 	}
 })
 
