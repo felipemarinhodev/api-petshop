@@ -14,7 +14,7 @@ roteador.post('/', async (req, res) => {
 		await fornecedor.criar()
 		res.status(201).send(JSON.stringify(fornecedor))
 	} catch (erro) {
-		res.status(404).send(JSON.stringify({ mensagem: erro.message}))
+		res.status(400).send(JSON.stringify({ mensagem: erro.message}))
 	}
 })
 
@@ -49,7 +49,7 @@ roteador.delete('/:id', async (req, res) => {
 		await fornecedor.remover()
 		res.status(204).send()
 	} catch (erro) {
-		res.status(400).send(JSON.stringify({ mensagem: erro.message}))
+		res.status(404).send(JSON.stringify({ mensagem: erro.message}))
 	}
 })
 
