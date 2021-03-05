@@ -6,7 +6,7 @@ const NaoEncontrado = require('./erros/NaoEncontrado')
 const CampoInvalido = require('./erros/CampoInvalido')
 const DadosNaoFornecidos = require('./erros/DadosNaoFornecidos')
 const ValorNaoSuportado = require('./erros/ValorNaoSuportado')
-const { formatosAceitos } = require('./Serializador')
+const { formatosAceitos, SerializadorErro } = require('./Serializador')
 const app = express()
 
 app.use(bodyParser.json())
@@ -41,9 +41,9 @@ app.use((erro, req, res, proximo) => {
 	if (erro instanceof ValorNaoSuportado) {
 		status = 406
 	}
-	console.log('Middleware - status', status);
+	const serializador = new SerializadorErro(res.getHeader('Content-Type'))
 	res.status(status)
-			.send(JSON.stringify({
+			.send(serializador.serializar({
 				mensagem: erro.message,
 				id: erro.idErro
 			}))
