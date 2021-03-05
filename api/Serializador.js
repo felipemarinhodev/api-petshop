@@ -14,10 +14,10 @@ class Serializador {
 }
 
 class SerializadorFornecedor extends Serializador {
-	constructor(contentType) {
+	constructor(contentType, camposExtras) {
 		super()
 		this.contentType = contentType
-		this.camposPublicos = ['id', 'empresa', 'categoria']
+		this.camposParaMostrar = ['id', 'empresa', 'categoria'].concat(camposExtras || [])
 	}
 
 	serializar (dados) {
@@ -30,7 +30,7 @@ class SerializadorFornecedor extends Serializador {
 	filtrarObjeto (dados) {
 		const novoObjeto = {}
 
-		this.camposPublicos.forEach(campo => {
+		this.camposParaMostrar.forEach(campo => {
 			if (dados.hasOwnProperty(campo)) {
 				novoObjeto[campo] = dados[campo]
 			}

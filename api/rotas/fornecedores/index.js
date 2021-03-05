@@ -14,8 +14,10 @@ roteador.get('/:id', async (req, res, proximo) => {
 		const { id } = req.params
 		const fornecedor = new Fornecedor({ id })
 		await fornecedor.carregar()
-		const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'))
-		res.send(  serializador.serializar(fornecedor))
+		const serializador = new SerializadorFornecedor(
+			res.getHeader('Content-Type'),
+			['email', 'dataCriacao', 'dataAtualizacao',	'versao' ])
+		res.send(serializador.serializar(fornecedor))
 	} catch (erro) {
 		proximo(erro)
 	}
@@ -27,7 +29,7 @@ roteador.post('/', async (req, res, proximo) => {
 		const fornecedor = new Fornecedor(dadosRecebidos)
 		await fornecedor.criar()
 		const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'))
-		res.status(201).send(  serializador.serializar(fornecedor))
+		res.status(201).send(serializador.serializar(fornecedor))
 	} catch (erro) {
 		proximo(erro)
 	}
@@ -41,7 +43,7 @@ roteador.put('/:id', async (req, res, proximo) => {
 		const fornecedor = new Fornecedor(dados)
 		await fornecedor.atualizar()
 		const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'))
-		res.status(200).send(  serializador.serializar(fornecedor))
+		res.status(200).send(serializador.serializar(fornecedor))
 	} catch (erro) {
 		proximo(erro) // Middleware que responde os erros da API
 	}
