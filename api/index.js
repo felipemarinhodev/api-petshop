@@ -6,9 +6,26 @@ const NaoEncontrado = require('./erros/NaoEncontrado')
 const CampoInvalido = require('./erros/CampoInvalido')
 const DadosNaoFornecidos = require('./erros/DadosNaoFornecidos')
 const ValorNaoSuportado = require('./erros/ValorNaoSuportado')
+const { formatosAceitos } = require('./Serializador')
 const app = express()
 
 app.use(bodyParser.json())
+
+app.use((req, res, proximo) => {
+	const formatoRequisitado = req.header('Accept')
+
+	if ( formatoRequisitado === '*/*' ) {
+		formatoRequisitado = 'application/json'
+	}
+
+	if (formatosAceitos.indexOf(formatoRequisitado) === -1 ) {
+		res.status(406).end()
+		return
+	}
+
+	res.setHeader('Content-Type', formatoRequisitado)
+	proximo()
+})
 
 app.use('/api/fornecedores', roteador)
 
@@ -24,6 +41,7 @@ app.use((erro, req, res, proximo) => {
 	if (erro instanceof ValorNaoSuportado) {
 		status = 406
 	}
+	console.log('Middleware - status', status);
 	res.status(status)
 			.send(JSON.stringify({
 				mensagem: erro.message,
