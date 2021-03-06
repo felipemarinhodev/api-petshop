@@ -62,6 +62,6 @@ roteador.delete('/:id', async (req, res, proximo) => {
 	}
 })
 
-roteador.use('/:id/produtos', roteadorProdutos)
+roteador.use('/:idFornecedor/produtos', roteadorProdutos)
 
 module.exports = roteador
