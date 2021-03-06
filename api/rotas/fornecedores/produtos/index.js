@@ -1,8 +1,11 @@
-const roteador = require('express').Router()
+const roteador = require('express').Router({ mergeParams: true }) // faz com que o parametros do Router pai sejam visiveis pelo Route filho
+const Tabela = require('./TabelaProduto')
 
-roteador.get('/', (req, res) => {
+roteador.get('/', async (req, res) => {
+	const { idFornecedor } = req.params
+	const produtos = await Tabela.listar(idFornecedor)
 	res.send(
-		JSON.stringify([])
+		JSON.stringify(produtos)
 	)
 })
 
