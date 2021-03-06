@@ -3,6 +3,8 @@ const TabelaFornecedor = require('./TabelaFornecedor')
 const Fornecedor = require('./Fornecedor')
 const { SerializadorFornecedor } = require('../../Serializador')
 
+const roteadorProdutos = require('./produtos')
+
 roteador.get('/', async (req, res) => {
 	const resultados = await TabelaFornecedor.listar()
 	const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'))
@@ -59,5 +61,7 @@ roteador.delete('/:id', async (req, res, proximo) => {
 		proximo(erro)
 	}
 })
+
+roteador.use('/:id/produtos', roteadorProdutos)
 
 module.exports = roteador
