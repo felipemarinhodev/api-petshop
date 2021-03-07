@@ -4,7 +4,7 @@ const Tabela = require('./TabelaProduto')
 
 roteador.get('/', async (req, res) => {
 	const { idFornecedor } = req.params
-	const produtos = await Tabela.listar(idFornecedor)
+	const produtos = await Tabela.listar(Number(idFornecedor))
 	res.send(
 		JSON.stringify(produtos)
 	)
@@ -13,10 +13,20 @@ roteador.get('/', async (req, res) => {
 roteador.post('/', async (req, res) => {
 	const { idFornecedor } = req.params
 	const { body } = req
-	const dados = Object.assign({}, body, { fornecedor: idFornecedor })
+	const dados = Object.assign({}, body, { fornecedor: Number(idFornecedor) })
 	const produto = new Produto(dados)
 	await produto.criar()
 	res.status(201).send(produto)
 })
+
+roteador.delete('/:id', async (req, res) => {
+	const { idFornecedor, id } = req.params
+	const produto = new Produto({ id, fornecedor: Number(idFornecedor) })
+	await produto.apagar()
+	res.status(204).send()
+})
+
+
+
 
 module.exports = roteador
