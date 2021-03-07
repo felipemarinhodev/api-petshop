@@ -30,6 +30,20 @@ roteador.delete('/:id', async (req, res) => {
 	res.status(204).send()
 })
 
+roteador.get('/:id', async (req, res, proximo) => {
+	try {
+		const { id, idFornecedor } = req.params
+		const dados = {
+			id,
+			fornecedor: idFornecedor
+		}
+		const produto = new Produto(dados)
+		await produto.carregar()
+		res.status(200).send(JSON.stringify(produto))
+	} catch (erro) {
+		proximo(erro)
+	}
+})
 
 
 

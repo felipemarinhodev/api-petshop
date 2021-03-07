@@ -48,6 +48,16 @@ class Produto {
 	async apagar () {
 		return await Tabela.remover(this.id, this.fornecedor)
 	}
+
+	async carregar () {
+		const produto = await Tabela.pegarPorId(this.id, this.fornecedor)
+		this.titulo = produto.titulo
+		this.preco = produto.preco
+		this.quantidade = produto.quantidade
+		this.dataCriacao = produto.dataCriacao
+		this.dataAtualizacao = produto.dataAtualizacao
+		this.versao = produto.versao
+	}
 }
 
 module.exports = Produto
