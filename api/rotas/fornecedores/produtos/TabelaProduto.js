@@ -8,5 +8,10 @@ module.exports = {
 	},
 	inserir (dados) {
 		return Modelo.create(dados)
+	},
+	remover (id, fornecedor) {
+		return Modelo.destroy({
+			where: { id, fornecedor	}
+		})
 	}
 }
