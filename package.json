@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon api/index.js"
   },
   "keywords": [],
   "author": "Felipe Marinho <npm@felipemarinho.dev> (https://felipemarinho.dev/)",
@@ -16,5 +17,8 @@
     "jsontoxml": "^1.0.1",
     "pg": "^8.5.1",
     "sequelize": "^6.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
