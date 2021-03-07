@@ -26,7 +26,7 @@ class Produto {
 			titulo: this.titulo,
 			preco: this.preco,
 			quantidade: this.quantidade,
-			fornecedo: this.fornecedor
+			fornecedor: this.fornecedor
 		})
 		this.id = resultado.id
 		this.dataCriacao = resultado.dataCriacao
