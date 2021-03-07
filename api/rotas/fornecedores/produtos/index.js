@@ -10,13 +10,17 @@ roteador.get('/', async (req, res) => {
 	)
 })
 
-roteador.post('/', async (req, res) => {
-	const { idFornecedor } = req.params
-	const { body } = req
-	const dados = Object.assign({}, body, { fornecedor: Number(idFornecedor) })
-	const produto = new Produto(dados)
-	await produto.criar()
-	res.status(201).send(produto)
+roteador.post('/', async (req, res, proximo) => {
+	try {
+		const { idFornecedor } = req.params
+		const { body } = req
+		const dados = Object.assign({}, body, { fornecedor: Number(idFornecedor) })
+		const produto = new Produto(dados)
+		await produto.criar()
+		res.status(201).send(produto)
+	} catch (erro) {
+		proximo(erro)
+	}
 })
 
 roteador.delete('/:id', async (req, res) => {
