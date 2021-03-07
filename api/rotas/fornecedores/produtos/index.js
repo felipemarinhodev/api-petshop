@@ -54,4 +54,23 @@ roteador.get('/:id', async (req, res, proximo) => {
 	}
 })
 
+roteador.put('/:id', async (req, res, proximo) => {
+	try {
+		const { id, idFornecedor } = req.params
+		const dados = Object.assign(
+			{},
+			req.body,
+			{ id, fornecedor: idFornecedor }
+		)
+		const produto = new Produto(dados)
+		await produto.atualizar()
+		const serializador = new SerializadorProduto(
+			res.getHeader('Content-Type'),
+		)
+		res.status(200).send(serializador.serializar(produto))
+	} catch (erro) {
+		proximo(erro)
+	}
+})
+
 module.exports = roteador
