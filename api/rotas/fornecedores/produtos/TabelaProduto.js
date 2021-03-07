@@ -5,5 +5,8 @@ module.exports = {
 		return Modelo.findAll({
 			where: { fornecedor: idFornecedor }
 		})		
+	},
+	inserir (dados) {
+		return Modelo.create(dados)
 	}
 }
