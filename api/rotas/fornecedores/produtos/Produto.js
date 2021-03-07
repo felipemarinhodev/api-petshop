@@ -82,6 +82,15 @@ class Produto {
 			}, dadosParaAtualizar
 		)
 	}
+
+	async diminuirEstoque () {
+		return Tabela.subtrair(
+			this.id,
+			this.fornecedor,
+			'quantidade',
+			this.quantidade
+		)
+	}
 }
 
 module.exports = Produto
