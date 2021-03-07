@@ -1,4 +1,5 @@
 const CampoInvalido = require('../../../erros/CampoInvalido')
+const DadosNaoFornecidos = require('../../../erros/DadosNaoFornecidos')
 const Tabela = require('./TabelaProduto')
 
 class Produto {
@@ -57,6 +58,29 @@ class Produto {
 		this.dataCriacao = produto.dataCriacao
 		this.dataAtualizacao = produto.dataAtualizacao
 		this.versao = produto.versao
+	}
+
+	async atualizar () {
+		const dadosParaAtualizar = {}
+		if (typeof this.titulo === 'string' && this.titulo.length > 0) {
+			dadosParaAtualizar.titulo = this.titulo
+		}
+		if (typeof this.preco === 'number' && this.preco > 0) {
+			dadosParaAtualizar.preco = this.preco
+		}
+		if (typeof this.quantidade === 'number') {
+			dadosParaAtualizar.quantidade = this.quantidade
+		}
+		if (Object.keys(dadosParaAtualizar).length === 0) {
+			throw new DadosNaoFornecidos()
+		}
+
+		return Tabela.atualizar(
+			{
+				id: this.id,
+				fornecedor: this.fornecedor
+			}, dadosParaAtualizar
+		)
 	}
 }
 
