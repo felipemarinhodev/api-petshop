@@ -22,6 +22,10 @@ roteador.post('/', async (req, res, proximo) => {
 		const serializador = new SerializadorProduto(
 			res.getHeader('Content-Type')
 		)
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
+		res.set('Location', `/api/fornecedores/${produto.fornecedor}/produtos/${produto.id}`)
 		res.status(201).send(serializador.serializar(produto))
 	} catch (erro) {
 		proximo(erro)
@@ -48,7 +52,28 @@ roteador.get('/:id', async (req, res, proximo) => {
 			res.getHeader('Content-Type'),
 			['preco', 'quantidade', 'fornecedor', 'dataCriacao', 'dataAtualizacao', 'versao']
 		)
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
 		res.status(200).send(serializador.serializar(produto))
+	} catch (erro) {
+		proximo(erro)
+	}
+})
+
+roteador.head('/:id', async (req, res, proximo) => {
+	try {
+		const { id, idFornecedor } = req.params
+		const dados = {
+			id,
+			fornecedor: idFornecedor
+		}
+		const produto = new Produto(dados)
+		await produto.carregar()
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
+		res.status(200).end()
 	} catch (erro) {
 		proximo(erro)
 	}
@@ -64,6 +89,10 @@ roteador.put('/:id', async (req, res, proximo) => {
 		)
 		const produto = new Produto(dados)
 		await produto.atualizar()
+		await produto.carregar()
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
 		const serializador = new SerializadorProduto(
 			res.getHeader('Content-Type'),
 		)
@@ -80,6 +109,9 @@ roteador.post('/:id/diminuir-estoque', async (req, res, proximo) => {
 			fornecedor: req.fornecedor.id
 		})
 		await produto.carregar()
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
 		const { quantidade } = req.body
 		produto.quantidade = produto.quantidade - quantidade
 		await produto.diminuirEstoque()

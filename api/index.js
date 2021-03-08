@@ -12,6 +12,11 @@ const app = express()
 app.use(bodyParser.json())
 
 app.use((req, res, proximo) => {
+	res.set('X-Powered-By', 'api-petshop')
+	proximo()
+})
+
+app.use((req, res, proximo) => {
 	const formatoRequisitado = req.header('Accept')
 
 	if ( formatoRequisitado === '*/*' ) {

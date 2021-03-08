@@ -1,4 +1,5 @@
 const instancia = require('../../../banco-dados')
+const NaoEncontrado = require('../../../erros/NaoEncontrado')
 const Modelo = require('./ModeloTabelaProduto')
 
 module.exports = {
@@ -23,7 +24,7 @@ module.exports = {
 		})
 
 		if (!encontrado) {
-			throw new Error('Produto não foi encontrado!')
+			throw new NaoEncontrado('Produto')
 		}
 
 		return encontrado
