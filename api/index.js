@@ -11,14 +11,9 @@ const app = express()
 
 app.use(bodyParser.json())
 
-app.use((req, res, proximo) => {
-	res.set('X-Powered-By', 'api-petshop')
-	res.set('Access-Control-Allow-Origin', '*')
-	proximo()
-})
 
 app.use((req, res, proximo) => {
-	const formatoRequisitado = req.header('Accept')
+	let formatoRequisitado = req.header('Accept')
 
 	if ( formatoRequisitado === '*/*' ) {
 		formatoRequisitado = 'application/json'
@@ -30,6 +25,12 @@ app.use((req, res, proximo) => {
 	}
 
 	res.setHeader('Content-Type', formatoRequisitado)
+	proximo()
+})
+
+app.use((req, res, proximo) => {
+	res.set('X-Powered-By', 'api-petshop')
+	res.set('Access-Control-Allow-Origin', '*')
 	proximo()
 })
 
