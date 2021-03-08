@@ -91,6 +91,9 @@ roteador.post('/:id/diminuir-estoque', async (req, res, proximo) => {
 			fornecedor: req.fornecedor.id
 		})
 		await produto.carregar()
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
 		const { quantidade } = req.body
 		produto.quantidade = produto.quantidade - quantidade
 		await produto.diminuirEstoque()
