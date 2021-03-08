@@ -71,6 +71,10 @@ roteador.put('/:id', async (req, res, proximo) => {
 		)
 		const produto = new Produto(dados)
 		await produto.atualizar()
+		await produto.carregar()
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
 		const serializador = new SerializadorProduto(
 			res.getHeader('Content-Type'),
 		)
