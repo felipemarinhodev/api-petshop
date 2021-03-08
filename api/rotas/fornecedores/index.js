@@ -2,7 +2,6 @@ const roteador = require('express').Router()
 const TabelaFornecedor = require('./TabelaFornecedor')
 const Fornecedor = require('./Fornecedor')
 const { SerializadorFornecedor } = require('../../Serializador')
-
 const roteadorProdutos = require('./produtos')
 
 roteador.options('/', (req, res) => {
@@ -13,7 +12,11 @@ roteador.options('/', (req, res) => {
 
 roteador.get('/', async (req, res) => {
 	const resultados = await TabelaFornecedor.listar()
-	const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'))
+	const serializador = new SerializadorFornecedor(
+		res.getHeader('Content-Type'),
+		['empresa']
+
+	)
 	res.status(200).send(serializador.serializar(resultados))
 })
 
@@ -22,7 +25,10 @@ roteador.post('/', async (req, res, proximo) => {
 		const dadosRecebidos = req.body
 		const fornecedor = new Fornecedor(dadosRecebidos)
 		await fornecedor.criar()
-		const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'))
+		const serializador = new SerializadorFornecedor(
+			res.getHeader('Content-Type'),
+			['empresa']
+		)
 		res.status(201).send(serializador.serializar(fornecedor))
 	} catch (erro) {
 		proximo(erro)
@@ -42,7 +48,7 @@ roteador.get('/:id', async (req, res, proximo) => {
 		await fornecedor.carregar()
 		const serializador = new SerializadorFornecedor(
 			res.getHeader('Content-Type'),
-			['email', 'dataCriacao', 'dataAtualizacao',	'versao' ])
+			[ 'empresa', 'email', 'dataCriacao', 'dataAtualizacao',	'versao' ])
 		res.send(serializador.serializar(fornecedor))
 	} catch (erro) {
 		proximo(erro)
@@ -57,7 +63,10 @@ roteador.put('/:id', async (req, res, proximo) => {
 		const dados = Object.assign({}, dadosRecebidos, { id })
 		const fornecedor = new Fornecedor(dados)
 		await fornecedor.atualizar()
-		const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'))
+		const serializador = new SerializadorFornecedor(
+			res.getHeader('Content-Type'),
+			['empresa']
+		)
 		res.status(200).send(serializador.serializar(fornecedor))
 	} catch (erro) {
 		proximo(erro) // Middleware que responde os erros da API
