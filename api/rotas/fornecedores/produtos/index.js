@@ -22,6 +22,10 @@ roteador.post('/', async (req, res, proximo) => {
 		const serializador = new SerializadorProduto(
 			res.getHeader('Content-Type')
 		)
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
+		res.set('Location', `/api/fornecedores/${produto.fornecedor}/produtos/${produto.id}`)
 		res.status(201).send(serializador.serializar(produto))
 	} catch (erro) {
 		proximo(erro)
