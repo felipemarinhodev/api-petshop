@@ -36,6 +36,9 @@ app.use((req, res, proximo) => {
 
 app.use('/api/fornecedores', roteador)
 
+const roteadorV2 = require('./rotas/fornecedores/rotas.v2')
+app.use('/api/v2/fornecedores', roteadorV2)
+
 // Middleware que controla os erros da API
 app.use((erro, req, res, proximo) => {
 	let status = 500
