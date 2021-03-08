@@ -11,7 +11,7 @@ module.exports = {
 	async buscarPorId(id) {
 		const encontrado = await Modelo.findOne({ where: { id }	})
 		if (!encontrado) {
-			throw new NaoEncontrado()
+			throw new NaoEncontrado('Fornecedor')
 		}
 		return encontrado
 	},
