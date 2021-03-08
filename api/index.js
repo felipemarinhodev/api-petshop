@@ -13,6 +13,7 @@ app.use(bodyParser.json())
 
 app.use((req, res, proximo) => {
 	res.set('X-Powered-By', 'api-petshop')
+	res.set('Access-Control-Allow-Origin', '*')
 	proximo()
 })
 
