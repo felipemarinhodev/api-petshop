@@ -52,6 +52,9 @@ roteador.get('/:id', async (req, res, proximo) => {
 			res.getHeader('Content-Type'),
 			['preco', 'quantidade', 'fornecedor', 'dataCriacao', 'dataAtualizacao', 'versao']
 		)
+		res.set('ETag', produto.versao)
+		const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+		res.set('Last-Modified', timestamp)
 		res.status(200).send(serializador.serializar(produto))
 	} catch (erro) {
 		proximo(erro)
